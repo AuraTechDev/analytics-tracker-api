@@ -1,12 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import {
-  DYNAMO_REGION,
-  DYNAMODB_ENDPOINT,
-  AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY,
-} from '../config/env.config';
 
 @Injectable()
 export class DynamoDBService {
@@ -14,12 +8,18 @@ export class DynamoDBService {
   private readonly docClient: DynamoDBDocumentClient;
 
   constructor() {
+    const {
+      AWS_ACCESS_KEY_ID,
+      AWS_SECRET_ACCESS_KEY,
+      DYNAMODB_ENDPOINT,
+      DYNAMO_REGION,
+    } = process.env;
     this.client = new DynamoDBClient({
-      region: process.env.DYNAMO_REGION as string,
-      endpoint: process.env.DYNAMODB_ENDPOINT,
+      region: DYNAMO_REGION as string,
+      endpoint: DYNAMODB_ENDPOINT,
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+        accessKeyId: AWS_ACCESS_KEY_ID || '',
+        secretAccessKey: AWS_SECRET_ACCESS_KEY || '',
       },
     });
 
