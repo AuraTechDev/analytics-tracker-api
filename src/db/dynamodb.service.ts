@@ -15,11 +15,11 @@ export class DynamoDBService {
 
   constructor() {
     this.client = new DynamoDBClient({
-      region: DYNAMO_REGION,
-      endpoint: DYNAMODB_ENDPOINT,
+      region: process.env.DYNAMO_REGION as string,
+      endpoint: process.env.DYNAMODB_ENDPOINT,
       credentials: {
-        accessKeyId: AWS_ACCESS_KEY_ID,
-        secretAccessKey: AWS_SECRET_ACCESS_KEY,
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
       },
     });
 
