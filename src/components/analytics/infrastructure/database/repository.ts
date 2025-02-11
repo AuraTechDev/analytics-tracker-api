@@ -80,7 +80,7 @@ export class DBEventRepository implements EventRepository {
         );
       });
     } catch (error) {
-      this.errorHandler.handle(error as Error, 'Error saving event');
+      this.errorHandler.handle(error as Error, 'Error getting events');
     }
   }
 }
