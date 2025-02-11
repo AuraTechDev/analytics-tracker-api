@@ -18,8 +18,9 @@ export class DynamoDBEventRepository implements EventRepository {
       TableName: 'Events',
       Item: {
         id: { S: event.id },
-        type: { S: event.name },
-        timestamp: { N: String(event.timestamp) },
+        name: { S: event.name },
+        timestamp: { N: event.timestamp.toString() },
+        payload: { S: JSON.stringify(event.payload) },
       },
     };
 
@@ -33,9 +34,9 @@ export class DynamoDBEventRepository implements EventRepository {
       (item) =>
         new Event(
           item.id.S as string,
-          item.type.S as string,
-          new Date(Number(item.timestamp.N)),
-          {},
+          item.name.S as string,
+          Number(item.timestamp.N),
+          JSON.parse(item.payload.S!) as Record<string, unknown>,
         ),
     );
   }

@@ -7,7 +7,7 @@ export class AnalyticsService {
   constructor(private readonly eventRepository: EventRepository) {}
 
   async trackEvent(name: string, payload: Record<string, unknown>) {
-    const event = new Event(crypto.randomUUID(), name, new Date(), payload);
+    const event = new Event(crypto.randomUUID(), name, Date.now(), payload);
     await this.eventRepository.save(event);
   }
 
