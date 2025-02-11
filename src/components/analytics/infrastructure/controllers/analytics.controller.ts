@@ -5,7 +5,7 @@ import { AnalyticsService } from '../../application/service';
 export class AnalyticsController {
   constructor(private readonly analyticsService: AnalyticsService) {}
 
-  @Post()
+  @Post('track')
   async trackEvent(
     @Body() body: { name: string; payload: Record<string, unknown> },
   ) {
@@ -13,7 +13,7 @@ export class AnalyticsController {
     return { message: 'Event tracked successfully' };
   }
 
-  @Get()
+  @Get('events')
   async getEvents() {
     return this.analyticsService.getEvents();
   }
