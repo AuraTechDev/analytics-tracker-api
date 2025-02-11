@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { Event } from '../domain/entity';
-import { EventRepository } from '../domain/repository';
+import { Injectable, Inject } from '@nestjs/common';
+import { Event } from '../domain/event.entity';
+import { EventRepository, EVENT_REPOSITORY } from '../domain/event.repository';
 
 @Injectable()
 export class AnalyticsService {
-  constructor(private readonly eventRepository: EventRepository) {}
+  constructor(
+    @Inject(EVENT_REPOSITORY) private readonly eventRepository: EventRepository,
+  ) {}
 
   async trackEvent(name: string, payload: Record<string, unknown>) {
     const event = new Event(crypto.randomUUID(), name, Date.now(), payload);

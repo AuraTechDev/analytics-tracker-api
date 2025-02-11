@@ -4,8 +4,8 @@ import {
   PutItemCommand,
   ScanCommand,
 } from '@aws-sdk/client-dynamodb';
-import { EventRepository } from '../../domain/repository';
-import { Event } from '../../domain/entity';
+import { EventRepository } from '../../domain/event.repository';
+import { Event } from '../../domain/event.entity';
 
 @Injectable()
 export class DynamoDBEventRepository implements EventRepository {

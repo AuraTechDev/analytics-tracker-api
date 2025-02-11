@@ -4,6 +4,7 @@ import { dbClient } from './db/dynamo.client';
 import { AnalyticsController } from './components/analytics/infrastructure/controllers/analytics.controller';
 import { AnalyticsService } from './components/analytics/application/service';
 import { DynamoDBEventRepository } from './components/analytics/infrastructure/database/repository';
+import { EVENT_REPOSITORY } from './components/analytics/domain/event.repository';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { DynamoDBEventRepository } from './components/analytics/infrastructure/d
   controllers: [AnalyticsController],
   providers: [
     AnalyticsService,
-    { provide: 'EventRepository', useClass: DynamoDBEventRepository },
+    { provide: EVENT_REPOSITORY, useClass: DynamoDBEventRepository },
     { provide: 'DynamoDBClient', useValue: dbClient },
   ],
 })
