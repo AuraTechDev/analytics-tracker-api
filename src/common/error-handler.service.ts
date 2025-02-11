@@ -8,8 +8,8 @@ import {
 import { DynamoDBServiceException } from '@aws-sdk/client-dynamodb';
 
 @Injectable()
-export class ErrorHandler {
-  private readonly logger = new Logger(ErrorHandler.name);
+export class ErrorHandlerService {
+  private readonly logger = new Logger(ErrorHandlerService.name);
 
   handle(error: Error, contextMessage: string): never {
     this.logger.error(

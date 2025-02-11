@@ -8,7 +8,7 @@ import {
 import { EventRepository } from '../../domain/event.repository';
 import { Event } from '../../domain/event.entity';
 import { DynamoDBService } from '../../../../db/dynamodb.service';
-import { ErrorHandler } from 'src/common/error-handler';
+import { ErrorHandlerService } from 'src/common/error-handler.service';
 
 @Injectable()
 export class DBEventRepository implements EventRepository {
@@ -16,7 +16,7 @@ export class DBEventRepository implements EventRepository {
 
   constructor(
     private readonly dynamoDBService: DynamoDBService,
-    private readonly errorHandler: ErrorHandler,
+    private readonly errorHandler: ErrorHandlerService,
   ) {}
 
   /**
