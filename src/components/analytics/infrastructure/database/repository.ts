@@ -21,22 +21,22 @@ export class DynamoDBEventRepository implements EventRepository {
    * @throws DynamoDBError if the save operation fails
    */
   async save(event: Event): Promise<void> {
-    try {
-      const params: PutItemCommandInput = {
-        TableName: this.tableName,
-        Item: {
-          id: { S: event.id },
-          name: { S: event.name },
-          timestamp: { N: event.timestamp.toString() },
-          payload: { S: JSON.stringify(event.payload) },
-        },
-      };
+    const params: PutItemCommandInput = {
+      TableName: this.tableName,
+      Item: {
+        id: { S: event.id },
+        name: { S: event.name },
+        timestamp: { N: event.timestamp.toString() },
+        payload: { S: JSON.stringify(event.payload) },
+      },
+    };
 
+    try {
       await this.dynamoDBService.getClient().send(new PutItemCommand(params));
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
-      throw new Error(`Failed to fetch events from database: ${errorMessage}`);
+      throw new Error(`Failed to save event to database: ${errorMessage}`);
     }
   }
 
@@ -61,28 +61,21 @@ export class DynamoDBEventRepository implements EventRepository {
       }
 
       return result.Items.map((item) => {
-        try {
-          if (
-            !item.id?.S ||
-            !item.name?.S ||
-            !item.timestamp?.N ||
-            !item.payload?.S
-          ) {
-            throw new Error('Invalid item structure');
-          }
-
-          return new Event(
-            item.id.S,
-            item.name.S,
-            Number(item.timestamp.N),
-            JSON.parse(item.payload.S) as Record<string, unknown>,
-          );
-        } catch (parseError: unknown) {
-          console.error('Error parsing event item:', parseError, item);
-          const errorMessage =
-            parseError instanceof Error ? parseError.message : 'Unknown error';
-          throw new Error(`Failed to parse event: ${errorMessage}`);
+        if (
+          !item.id?.S ||
+          !item.name?.S ||
+          !item.timestamp?.N ||
+          !item.payload?.S
+        ) {
+          throw new Error('Invalid item structure');
         }
+
+        return new Event(
+          item.id.S,
+          item.name.S,
+          Number(item.timestamp.N),
+          JSON.parse(item.payload.S) as Record<string, unknown>,
+        );
       });
     } catch (error: unknown) {
       const errorMessage =
