@@ -8,12 +8,16 @@ import {
 import { EventRepository } from '../../domain/event.repository';
 import { Event } from '../../domain/event.entity';
 import { DynamoDBService } from '../../../../db/dynamodb.service';
+import { ErrorHandler } from 'src/common/error-handler';
 
 @Injectable()
-export class DynamoDBEventRepository implements EventRepository {
+export class DBEventRepository implements EventRepository {
   private readonly tableName = 'Events';
 
-  constructor(private readonly dynamoDBService: DynamoDBService) {}
+  constructor(
+    private readonly dynamoDBService: DynamoDBService,
+    private readonly errorHandler: ErrorHandler,
+  ) {}
 
   /**
    * Saves an analytics event to DynamoDB
@@ -33,10 +37,8 @@ export class DynamoDBEventRepository implements EventRepository {
 
     try {
       await this.dynamoDBService.getClient().send(new PutItemCommand(params));
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      throw new Error(`Failed to save event to database: ${errorMessage}`);
+    } catch (error) {
+      this.errorHandler.handle(error as Error, 'Error saving event');
     }
   }
 
@@ -77,10 +79,8 @@ export class DynamoDBEventRepository implements EventRepository {
           JSON.parse(item.payload.S) as Record<string, unknown>,
         );
       });
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      throw new Error(`Failed to fetch events from database: ${errorMessage}`);
+    } catch (error) {
+      this.errorHandler.handle(error as Error, 'Error saving event');
     }
   }
 }
