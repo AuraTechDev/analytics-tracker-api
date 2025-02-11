@@ -7,6 +7,7 @@ import { DynamoDBService } from '../../../../db/dynamodb.service';
 @Injectable()
 export class DynamoDBEventRepository implements EventRepository {
   private readonly tableName = 'Events';
+
   constructor(private readonly dynamoDBService: DynamoDBService) {}
 
   async save(event: Event): Promise<void> {
@@ -28,6 +29,7 @@ export class DynamoDBEventRepository implements EventRepository {
     const result = await this.dynamoDBService
       .getClient()
       .send(new ScanCommand(params));
+
     return (result.Items || []).map(
       (item) =>
         new Event(

@@ -9,7 +9,9 @@ export class AnalyticsController {
   async trackEvent(
     @Body() body: { name: string; payload: Record<string, unknown> },
   ) {
-    await this.analyticsService.trackEvent(body.name, body.payload);
+    const { name, payload } = body;
+    await this.analyticsService.trackEvent(name, payload);
+
     return { message: 'Event tracked successfully' };
   }
 
