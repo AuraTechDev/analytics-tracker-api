@@ -1,21 +1,17 @@
-import { Injectable, Inject } from '@nestjs/common';
-import {
-  DynamoDBClient,
-  PutItemCommand,
-  ScanCommand,
-} from '@aws-sdk/client-dynamodb';
+import { Injectable } from '@nestjs/common';
+import { PutItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { EventRepository } from '../../domain/event.repository';
 import { Event } from '../../domain/event.entity';
+import { DynamoDBService } from '../../../../db/dynamodb.service';
 
 @Injectable()
 export class DynamoDBEventRepository implements EventRepository {
-  constructor(
-    @Inject('DynamoDBClient') private readonly dbClient: DynamoDBClient,
-  ) {}
+  private readonly tableName = 'Events';
+  constructor(private readonly dynamoDBService: DynamoDBService) {}
 
   async save(event: Event): Promise<void> {
     const params = {
-      TableName: 'Events',
+      TableName: this.tableName,
       Item: {
         id: { S: event.id },
         name: { S: event.name },
@@ -24,12 +20,14 @@ export class DynamoDBEventRepository implements EventRepository {
       },
     };
 
-    await this.dbClient.send(new PutItemCommand(params));
+    await this.dynamoDBService.getClient().send(new PutItemCommand(params));
   }
 
   async findAll(): Promise<Event[]> {
-    const params = { TableName: 'Events' };
-    const result = await this.dbClient.send(new ScanCommand(params));
+    const params = { TableName: this.tableName };
+    const result = await this.dynamoDBService
+      .getClient()
+      .send(new ScanCommand(params));
     return (result.Items || []).map(
       (item) =>
         new Event(
