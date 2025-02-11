@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
+import { dbClient } from './db/dynamo.client';
+import { AnalyticsController } from './components/analytics/infrastructure/controllers/analytics.controller';
+import { AnalyticsService } from './components/analytics/application/service';
+import { DynamoDBEventRepository } from './components/analytics/infrastructure/database/repository';
 
 @Module({
   imports: [
@@ -11,7 +13,11 @@ import { ConfigModule } from '@nestjs/config';
       expandVariables: true,
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AnalyticsController],
+  providers: [
+    AnalyticsService,
+    { provide: 'EventRepository', useClass: DynamoDBEventRepository },
+    { provide: 'DynamoDBClient', useValue: dbClient },
+  ],
 })
 export class AppModule {}
