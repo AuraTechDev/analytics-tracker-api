@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'DynamoDB Events table setup'
+
+Resources:
+  EventsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Events
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      Tags:
+        - Key: Purpose
+          Value: EventTracking
+
+Outputs:
+  TableName:
+    Description: 'Name of the Events table'
+    Value: !Ref EventsTable
+
+  TableArn:
+    Description: 'ARN of the Events table'
+    Value: !GetAtt EventsTable.Arn
