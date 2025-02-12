@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { App } from '../domain/app.entity';
+import { App, AppModel } from '../domain/app.entity';
 import { AppRepository, APP_REPOSITORY } from '../domain/app.repository';
 
 @Injectable()
@@ -8,8 +8,10 @@ export class AppService {
     @Inject(APP_REPOSITORY) private readonly appRepository: AppRepository,
   ) {}
 
-  async register(name: string) {
+  async register(name: string): Promise<AppModel> {
     const app = App.create(name);
-    await this.appRepository.register(app);
+    const storedApp = await this.appRepository.register(app);
+
+    return storedApp.attributes;
   }
 }

@@ -12,8 +12,8 @@ export class AppController {
       name: string;
     },
   ) {
-    await this.appService.register(body.name);
+    const app = await this.appService.register(body.name);
 
-    return { message: 'App registered successfully' };
+    return app;
   }
 }
