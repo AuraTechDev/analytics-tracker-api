@@ -13,7 +13,11 @@ export class AnalyticsService {
     await this.eventRepository.save(event);
   }
 
-  async getEvents(): Promise<Event[]> {
-    return this.eventRepository.findAll();
+  async getEvents(): Promise<EventModel[]> {
+    const events = (await this.eventRepository.findAll()).map(
+      (item) => item.attributes,
+    );
+
+    return events;
   }
 }
