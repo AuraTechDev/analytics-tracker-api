@@ -62,11 +62,7 @@ export class DBEventRepository implements EventRepository {
         .getClient()
         .send(new ScanCommand(params));
 
-      if (!result.Items) {
-        return [];
-      }
-
-      return result.Items.map((item) => {
+      return (result.Items ?? []).map((item) => {
         return new Event({
           id: item.id.S as unknown as string,
           appId: item.appId.S as string,
