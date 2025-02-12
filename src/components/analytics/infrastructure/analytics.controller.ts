@@ -16,8 +16,7 @@ export class AnalyticsController {
       eventData: Record<string, unknown>;
     },
   ) {
-    const id = crypto.randomUUID();
-    await this.analyticsService.trackEvent({ id, ...body });
+    await this.analyticsService.trackEvent(body);
 
     return { message: 'Event tracked successfully' };
   }
