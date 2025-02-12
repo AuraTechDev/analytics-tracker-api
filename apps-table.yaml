@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'DynamoDB Apps table setup'
+
+Resources:
+  AppsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Apps
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      Tags:
+        - Key: Purpose
+          Value: EventTracking
+
+Outputs:
+  TableName:
+    Description: 'Name of the Apps table'
+    Value: !Ref AppsTable
+
+  TableArn:
+    Description: 'ARN of the Apps table'
+    Value: !GetAtt AppsTable.Arn
