@@ -1,5 +1,5 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { AuthService } from '../application/service';
+import { AuthService } from '../application/auth.service';
 
 @Controller('auth')
 export class AuthController {
@@ -16,7 +16,7 @@ export class AuthController {
     const apiKey = crypto.randomUUID();
     const createdAt = new Date();
 
-    await this.authService.registerApp({
+    await this.authService.register({
       id,
       apiKey,
       name: body.name,
