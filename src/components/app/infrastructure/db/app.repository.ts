@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PutItemCommand, PutItemCommandInput } from '@aws-sdk/client-dynamodb';
-import { AppRepository } from '../domain/app.repository';
-import { App } from '../domain/app.entity';
-import { DynamoDBService } from '../../../db/dynamodb.service';
+import { AppRepository } from '../../domain/app.repository';
+import { App } from '../../domain/app.entity';
+import { DynamoDBService } from '../../../../db/dynamodb.service';
 import { ErrorHandlerService } from 'src/common/error-handler.service';
 
 @Injectable()
