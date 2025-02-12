@@ -12,16 +12,7 @@ export class AppController {
       name: string;
     },
   ) {
-    const id = crypto.randomUUID();
-    const apiKey = crypto.randomUUID();
-    const createdAt = new Date();
-
-    await this.appService.register({
-      id,
-      apiKey,
-      name: body.name,
-      createdAt,
-    });
+    await this.appService.register(body.name);
 
     return { message: 'App registered successfully' };
   }
