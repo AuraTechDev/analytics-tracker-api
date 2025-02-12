@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { GetItemCommandInput, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBService } from '../../../../db/dynamodb.service';
 import { ErrorHandlerService } from 'src/common/error-handler.service';
@@ -29,7 +29,13 @@ export class DBAuthRepository implements AuthRepository {
     };
 
     try {
-      await this.dynamoDBService.getClient().send(new GetItemCommand(params));
+      const result = await this.dynamoDBService
+        .getClient()
+        .send(new GetItemCommand(params));
+
+      if (!result.Item) {
+        throw new NotFoundException('App not found');
+      }
     } catch (error) {
       this.errorHandler.handle(error as Error, 'Error validating app');
     }
