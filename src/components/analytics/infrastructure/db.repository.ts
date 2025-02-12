@@ -21,7 +21,9 @@ export class DBEventRepository implements EventRepository {
 
   /**
    * Saves an analytics event to DynamoDB
+   *
    * @param event The event to save
+   * @returns Promise that resolves when the event is saved
    * @throws DynamoDBServiceException if the save operation fails
    */
   async save(event: Event): Promise<void> {
@@ -48,6 +50,7 @@ export class DBEventRepository implements EventRepository {
 
   /**
    * Retrieves all events from DynamoDB
+   *
    * @returns Promise containing an array of Event objects
    * @throws Error if fetching or parsing events fails
    */

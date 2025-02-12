@@ -19,6 +19,7 @@ export class DBAppRepository implements AppRepository {
    *
    * @param app - The app entity to register.
    * @returns A promise that resolves when the app is saved.
+   * @throws Error if the app cannot be saved.
    */
   async register(app: App): Promise<void> {
     const { id, name, apiKey, createdAt } = app.attributes;

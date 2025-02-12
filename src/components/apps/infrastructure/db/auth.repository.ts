@@ -13,6 +13,13 @@ export class DBAuthRepository implements AuthRepository {
     private readonly errorHandler: ErrorHandlerService,
   ) {}
 
+  /**
+   * Validates an API key by checking its existence in the DynamoDB table.
+   *
+   * @param apiKey The API key to be validated.
+   * @returns A promise that resolves when the API key is validated.
+   * @throws Error if the API key is not found in the table.
+   */
   async validate(apiKey: string) {
     const params: GetItemCommandInput = {
       TableName: this.tableName,
