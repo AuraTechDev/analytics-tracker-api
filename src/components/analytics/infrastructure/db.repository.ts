@@ -5,9 +5,9 @@ import {
   ScanCommandInput,
   PutItemCommandInput,
 } from '@aws-sdk/client-dynamodb';
-import { EventRepository } from '../../domain/event.repository';
-import { Event } from '../../domain/event.entity';
-import { DynamoDBService } from '../../../../db/dynamodb.service';
+import { EventRepository } from '../domain/event.repository';
+import { Event } from '../domain/event.entity';
+import { DynamoDBService } from '../../../db/dynamodb.service';
 import { ErrorHandlerService } from 'src/common/error-handler.service';
 
 @Injectable()
