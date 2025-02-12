@@ -25,13 +25,17 @@ export class DBEventRepository implements EventRepository {
    * @throws DynamoDBServiceException if the save operation fails
    */
   async save(event: Event): Promise<void> {
+    const { id, appId, userId, eventType, timestamp, eventData } =
+      event.attributes;
     const params: PutItemCommandInput = {
       TableName: this.tableName,
       Item: {
-        id: { S: event.id },
-        name: { S: event.name },
-        timestamp: { N: event.timestamp.toString() },
-        payload: { S: JSON.stringify(event.payload) },
+        id: { S: id },
+        appId: { S: appId },
+        userId: { S: userId },
+        eventType: { S: eventType },
+        timestamp: { S: timestamp.toString() },
+        eventData: { S: JSON.stringify(eventData) },
       },
     };
 
@@ -63,21 +67,17 @@ export class DBEventRepository implements EventRepository {
       }
 
       return result.Items.map((item) => {
-        if (
-          !item.id?.S ||
-          !item.name?.S ||
-          !item.timestamp?.N ||
-          !item.payload?.S
-        ) {
-          throw new Error('Invalid item structure');
-        }
-
-        return new Event(
-          item.id.S,
-          item.name.S,
-          Number(item.timestamp.N),
-          JSON.parse(item.payload.S) as Record<string, unknown>,
-        );
+        return new Event({
+          id: item.id.S as unknown as string,
+          appId: item.appId.S as string,
+          userId: item.userId.S as string,
+          eventType: item.eventType.S as string,
+          timestamp: new Date(item.timestamp.S as unknown as string),
+          eventData: JSON.parse(item.eventData.S as string) as Record<
+            string,
+            unknown
+          >,
+        });
       });
     } catch (error) {
       this.errorHandler.handle(error as Error, 'Error getting events');

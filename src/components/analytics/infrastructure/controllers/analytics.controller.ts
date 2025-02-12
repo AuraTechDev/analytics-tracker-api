@@ -5,7 +5,7 @@ import { AnalyticsService } from '../../application/service';
 export class AnalyticsController {
   constructor(private readonly analyticsService: AnalyticsService) {}
 
-  @Post('track')
+  @Post('event')
   async trackEvent(
     @Body()
     body: {
@@ -16,12 +16,13 @@ export class AnalyticsController {
       eventData: Record<string, unknown>;
     },
   ) {
-    await this.analyticsService.trackEvent(body);
+    const id = crypto.randomUUID();
+    await this.analyticsService.trackEvent({ id, ...body });
 
     return { message: 'Event tracked successfully' };
   }
 
-  @Get('events')
+  @Get('data')
   async getEvents() {
     return this.analyticsService.getEvents();
   }

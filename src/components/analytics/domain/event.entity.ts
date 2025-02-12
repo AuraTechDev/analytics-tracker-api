@@ -1,4 +1,5 @@
 export interface EventModel {
+  id: string;
   appId: string;
   userId: string;
   timestamp: Date;
