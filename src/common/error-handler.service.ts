@@ -4,6 +4,7 @@ import {
   NotFoundException,
   Logger,
   Injectable,
+  HttpException,
 } from '@nestjs/common';
 import { DynamoDBServiceException } from '@aws-sdk/client-dynamodb';
 
@@ -12,44 +13,71 @@ export class ErrorHandlerService {
   private readonly logger = new Logger(ErrorHandlerService.name);
 
   handle(error: Error, contextMessage: string): never {
-    this.logger.error(
-      `DynamoDB Error: ${contextMessage} - ${error.message}`,
-      error.stack,
-    );
+    this.logger.error(`${contextMessage} - ${error.message}`, error.stack);
 
     if (error instanceof DynamoDBServiceException) {
       switch (error.name) {
         case 'ConditionalCheckFailedException':
-          throw new BadRequestException('Condition check failed.');
+          this.throwBadRequest('Condition check failed.');
+          break;
         case 'ProvisionedThroughputExceededException':
-          throw new InternalServerErrorException(
+          this.throwInternalError(
             'DynamoDB throughput exceeded. Please try again later.',
           );
+          break;
         case 'ResourceNotFoundException':
-          throw new NotFoundException(
+          this.throwNotFound(
             'Requested resource (table or item) was not found.',
           );
+          break;
         case 'ItemCollectionSizeLimitExceededException':
-          throw new BadRequestException('Item size exceeds the allowed limit.');
+          this.throwBadRequest('Item size exceeds the allowed limit.');
+          break;
         case 'TransactionConflictException':
-          throw new BadRequestException(
+          this.throwBadRequest(
             'Transaction conflict detected. Retry the request.',
           );
+          break;
         case 'ValidationException':
-          throw new BadRequestException('Invalid request data.');
+          this.throwBadRequest('Invalid request data.');
+          break;
         case 'AccessDeniedException':
-          throw new InternalServerErrorException('Access denied to DynamoDB.');
+          this.throwInternalError('Access denied to DynamoDB.');
+          break;
         case 'InternalServerError':
-          throw new InternalServerErrorException('Internal error in DynamoDB.');
+          this.throwInternalError('Internal error in DynamoDB.');
+          break;
         default:
-          throw new InternalServerErrorException(
-            `DynamoDB error: ${error.name}`,
-          );
+          this.throwInternalError(`DynamoDB error: ${error.name}`);
       }
     }
 
-    throw new InternalServerErrorException(
-      `An unexpected error occurred: ${error.message}`,
-    );
+    if (error instanceof HttpException) {
+      switch (error.getStatus()) {
+        case 400:
+          this.throwBadRequest(error.message);
+          break;
+        case 404:
+          this.throwNotFound(error.message);
+          break;
+        default:
+          this.throwInternalError(error.message);
+          break;
+      }
+    }
+
+    this.throwInternalError(`An unexpected error occurred: ${error.message}`);
+  }
+
+  private throwBadRequest(message: string): never {
+    throw new BadRequestException(message);
+  }
+
+  private throwNotFound(message: string): never {
+    throw new NotFoundException(message);
+  }
+
+  private throwInternalError(message: string): never {
+    throw new InternalServerErrorException(message);
   }
 }
