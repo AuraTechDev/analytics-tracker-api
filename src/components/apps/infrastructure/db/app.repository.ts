@@ -21,20 +21,21 @@ export class DBAppRepository implements AppRepository {
    * @returns A promise that resolves when the app is saved.
    * @throws Error if the app cannot be saved.
    */
-  async register(app: App): Promise<void> {
-    const { id, name, apiKey, createdAt } = app.attributes;
+  async register(app: App): Promise<App> {
+    const { id, name, createdAt } = app.attributes;
     const params: PutItemCommandInput = {
       TableName: this.tableName,
       Item: {
         id: { S: id },
         name: { S: name },
-        apiKey: { S: apiKey },
         createdAt: { S: createdAt.toString() },
       },
     };
 
     try {
       await this.dynamoDBService.getClient().send(new PutItemCommand(params));
+
+      return app;
     } catch (error) {
       this.errorHandler.handle(error as Error, 'Error saving event');
     }
