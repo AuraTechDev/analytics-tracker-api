@@ -1,15 +1,13 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { AppModel, App } from '../domain/app.entity';
-import { AppRepository, APP_REPOSITORY } from '../domain/app.repository';
+import { AuthRepository, AUTH_REPOSITORY } from '../domain/auth.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(APP_REPOSITORY) private readonly appRepository: AppRepository,
+    @Inject(AUTH_REPOSITORY) private readonly authRepository: AuthRepository,
   ) {}
 
-  async register(model: AppModel) {
-    const app = new App(model);
-    await this.appRepository.register(app);
+  async validate(apiKey: string) {
+    await this.authRepository.validate(apiKey);
   }
 }

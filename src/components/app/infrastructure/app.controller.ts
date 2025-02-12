@@ -1,9 +1,9 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { AuthService } from '../application/auth.service';
+import { AppService } from '../application/app.service';
 
-@Controller('auth')
-export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+@Controller('app')
+export class AppController {
+  constructor(private readonly appService: AppService) {}
 
   @Post('register')
   async regisrter(
@@ -16,13 +16,13 @@ export class AuthController {
     const apiKey = crypto.randomUUID();
     const createdAt = new Date();
 
-    await this.authService.register({
+    await this.appService.register({
       id,
       apiKey,
       name: body.name,
       createdAt,
     });
 
-    return { message: 'Event tracked successfully' };
+    return { message: 'App registered successfully' };
   }
 }

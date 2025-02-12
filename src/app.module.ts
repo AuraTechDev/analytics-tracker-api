@@ -6,9 +6,9 @@ import { AnalyticsController } from './components/analytics/infrastructure/analy
 import { AnalyticsService } from './components/analytics/application/service';
 import { DBEventRepository } from './components/analytics/infrastructure/db.repository';
 import { EVENT_REPOSITORY } from './components/analytics/domain/event.repository';
-import { AuthController } from './components/app/infrastructure/auth.controller';
+import { AuthController } from './components/app/infrastructure/app.controller';
 import { AuthService } from './components/app/application/auth.service';
-import { DBAppRepository } from './components/app/infrastructure/auth.repository';
+import { DBAppRepository } from './components/app/infrastructure/app.repository';
 import { APP_REPOSITORY } from './components/app/domain/app.repository';
 
 @Module({
