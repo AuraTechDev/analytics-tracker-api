@@ -6,8 +6,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('validate')
-  async validate(@Headers('api-key') apiKey: string) {
-    await this.authService.validate(apiKey);
+  async validate(@Headers('app-id') appId: string) {
+    await this.authService.validate(appId);
 
     return { message: 'App validated successfully' };
   }

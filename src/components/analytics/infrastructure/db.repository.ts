@@ -27,14 +27,12 @@ export class DBEventRepository implements EventRepository {
    * @throws DynamoDBServiceException if the save operation fails
    */
   async save(event: Event): Promise<void> {
-    const { id, appId, userId, eventType, timestamp, eventData } =
-      event.attributes;
+    const { id, appId, eventType, timestamp, eventData } = event.attributes;
     const params: PutItemCommandInput = {
       TableName: this.tableName,
       Item: {
         id: { S: id },
         appId: { S: appId },
-        userId: { S: userId },
         eventType: { S: eventType },
         timestamp: { S: timestamp.toString() },
         eventData: { S: JSON.stringify(eventData) },
@@ -69,7 +67,6 @@ export class DBEventRepository implements EventRepository {
         return new Event({
           id: item.id.S as unknown as string,
           appId: item.appId.S as string,
-          userId: item.userId.S as string,
           eventType: item.eventType.S as string,
           timestamp: new Date(item.timestamp.S as unknown as string),
           eventData: JSON.parse(item.eventData.S as string) as Record<

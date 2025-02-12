@@ -10,7 +10,6 @@ export class AnalyticsController {
     @Body()
     body: {
       appId: string;
-      userId: string;
       timestamp: Date;
       eventType: string;
       eventData: Record<string, unknown>;
