@@ -17,7 +17,7 @@ export class DBAppRepository implements AppRepository {
   /**
    * Registers a new app in the DynamoDB table.
    *
-   * @param app - The app entity to register.
+   * @param app - The App entity to register.
    * @returns A promise that resolves when the app is saved.
    * @throws Error if the app cannot be saved.
    */

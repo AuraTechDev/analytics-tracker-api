@@ -22,7 +22,7 @@ export class DBEventRepository implements EventRepository {
   /**
    * Saves an analytics event to DynamoDB
    *
-   * @param event The event to save
+   * @param event The Event entity to save.
    * @returns Promise that resolves when the event is saved
    * @throws DynamoDBServiceException if the save operation fails
    */
