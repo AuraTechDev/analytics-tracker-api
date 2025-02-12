@@ -20,7 +20,7 @@ export class DBAuthRepository implements AuthRepository {
    * @returns A promise that resolves when the API key is validated.
    * @throws Error if the API key is not found in the table.
    */
-  async validate(apiKey: string) {
+  async validate(apiKey: string): Promise<void> {
     const params: GetItemCommandInput = {
       TableName: this.tableName,
       Key: {
