@@ -6,7 +6,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  async trackEvent(
+  async regisrter(
     @Body()
     body: {
       name: string;
