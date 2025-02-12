@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Event } from '../domain/event.entity';
+import { Event, EventModel } from '../domain/event.entity';
 import { EventRepository, EVENT_REPOSITORY } from '../domain/event.repository';
 
 @Injectable()
@@ -8,8 +8,8 @@ export class AnalyticsService {
     @Inject(EVENT_REPOSITORY) private readonly eventRepository: EventRepository,
   ) {}
 
-  async trackEvent(name: string, payload: Record<string, unknown>) {
-    const event = new Event(crypto.randomUUID(), name, Date.now(), payload);
+  async trackEvent(model: EventModel) {
+    const event = new Event(model);
     await this.eventRepository.save(event);
   }
 

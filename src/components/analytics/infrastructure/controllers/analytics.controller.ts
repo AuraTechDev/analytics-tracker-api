@@ -7,10 +7,16 @@ export class AnalyticsController {
 
   @Post('track')
   async trackEvent(
-    @Body() body: { name: string; payload: Record<string, unknown> },
+    @Body()
+    body: {
+      appId: string;
+      userId: string;
+      timestamp: Date;
+      eventType: string;
+      eventData: Record<string, unknown>;
+    },
   ) {
-    const { name, payload } = body;
-    await this.analyticsService.trackEvent(name, payload);
+    await this.analyticsService.trackEvent(body);
 
     return { message: 'Event tracked successfully' };
   }

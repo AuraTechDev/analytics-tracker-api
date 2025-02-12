@@ -22,7 +22,7 @@ export class DBEventRepository implements EventRepository {
   /**
    * Saves an analytics event to DynamoDB
    * @param event The event to save
-   * @throws DynamoDBError if the save operation fails
+   * @throws DynamoDBServiceException if the save operation fails
    */
   async save(event: Event): Promise<void> {
     const params: PutItemCommandInput = {
