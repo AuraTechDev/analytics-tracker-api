@@ -2,10 +2,14 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DynamoDBModule } from './db/dynamodb.module';
 import { ErrorHandlerService } from './common/error-handler.service';
-import { AnalyticsController } from './components/analytics/infrastructure/controllers/analytics.controller';
+import { AnalyticsController } from './components/analytics/infrastructure/analytics.controller';
 import { AnalyticsService } from './components/analytics/application/service';
-import { DBEventRepository } from './components/analytics/infrastructure/db/repository';
+import { DBEventRepository } from './components/analytics/infrastructure/db.repository';
 import { EVENT_REPOSITORY } from './components/analytics/domain/event.repository';
+import { AuthController } from './components/app/infrastructure/auth.controller';
+import { AuthService } from './components/app/application/service';
+import { DBAppRepository } from './components/app/infrastructure/db.repository';
+import { APP_REPOSITORY } from './components/app/domain/repository';
 
 @Module({
   imports: [
@@ -16,10 +20,12 @@ import { EVENT_REPOSITORY } from './components/analytics/domain/event.repository
     }),
     DynamoDBModule,
   ],
-  controllers: [AnalyticsController],
+  controllers: [AnalyticsController, AuthController],
   providers: [
-    AnalyticsService,
     ErrorHandlerService,
+    AnalyticsService,
+    AuthService,
+    { provide: APP_REPOSITORY, useClass: DBAppRepository },
     { provide: EVENT_REPOSITORY, useClass: DBEventRepository },
   ],
 })
