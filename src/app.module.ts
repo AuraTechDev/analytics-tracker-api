@@ -4,7 +4,7 @@ import { DynamoDBModule } from './db/dynamodb.module';
 import { ErrorHandlerService } from './common/error-handler.service';
 import { AnalyticsController } from './components/analytics/infrastructure/controllers/analytics.controller';
 import { AnalyticsService } from './components/analytics/application/service';
-import { DBEventRepository } from './components/analytics/infrastructure/database/repository';
+import { DBEventRepository } from './components/analytics/infrastructure/db/repository';
 import { EVENT_REPOSITORY } from './components/analytics/domain/event.repository';
 
 @Module({
