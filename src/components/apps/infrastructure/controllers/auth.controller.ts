@@ -1,11 +1,12 @@
-import { Controller, Get, Headers } from '@nestjs/common';
+import { Controller, Post, Headers, HttpCode } from '@nestjs/common';
 import { AuthService } from '../../application/auth.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('validate')
+  @Post('validate')
+  @HttpCode(200)
   async validate(@Headers('app-id') appId: string) {
     await this.authService.validate(appId);
 
