@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body } from '@nestjs/common';
+import { Controller, Post, Get, Headers, Body } from '@nestjs/common';
 import { AnalyticsService } from '../application/service';
 
 @Controller('analytics')
@@ -7,15 +7,15 @@ export class AnalyticsController {
 
   @Post('event')
   async trackEvent(
+    @Headers('x-api-id') appId: string,
     @Body()
     body: {
-      appId: string;
       timestamp: Date;
       eventType: string;
       eventData: Record<string, unknown>;
     },
   ) {
-    await this.analyticsService.trackEvent(body);
+    await this.analyticsService.trackEvent({ appId, ...body });
 
     return { message: 'Event tracked successfully' };
   }
