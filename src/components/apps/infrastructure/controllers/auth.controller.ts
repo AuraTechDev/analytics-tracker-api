@@ -7,7 +7,7 @@ export class AuthController {
 
   @Post('validate')
   @HttpCode(200)
-  async validate(@Headers('app-id') appId: string) {
+  async validate(@Headers('X-App-ID') appId: string) {
     await this.authService.validate(appId);
 
     return { message: 'App validated successfully' };
